@@ -1,7 +1,8 @@
-#coding:utf-8
+# coding:utf-8
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import AdaBoostClassifier
 import time
+
 
 # 训练集样本
 # ('User_id, Merchant_id, Coupon_id, Discount_rate, Distance, '
@@ -30,7 +31,8 @@ def loadData(FilePath, is_train=False):
         temp = line.strip('\n').split(',')
         try:
             CouponID.append(temp[2])
-            x.append([float(temp[0]), float(temp[1]), float(temp[3]), float(temp[4]), float(temp[5]), float(temp[6]), float(temp[7])])
+            x.append([float(temp[0]), float(temp[1]), float(temp[3]), float(temp[4]), float(temp[5]), float(temp[6]),
+                      float(temp[7])])
             if not is_train:
                 y.append(float(temp[9]))
         except Exception as e:
@@ -43,7 +45,7 @@ def loadData(FilePath, is_train=False):
 def getModel():
     x_train, y_train, _ = loadData('original_data/training.csv')
     start_time = time.time()
-    clf = AdaBoostClassifier(base_estimator=LogisticRegression(class_weight='balanced'), n_estimators=50)
+    clf = AdaBoostClassifier(base_estimator=LogisticRegression(class_weight='balanced', solver='liblinear'), n_estimators=50)
     clf.fit(x_train, y_train)
     print('Time for training model: ', time.time() - start_time)
     return clf
